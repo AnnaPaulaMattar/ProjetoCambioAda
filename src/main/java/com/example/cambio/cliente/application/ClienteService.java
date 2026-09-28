@@ -9,7 +9,9 @@ import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
@@ -23,19 +25,24 @@ public class ClienteService {
 
     public ClienteResponse cadastrar(CadastrarClienteRequest request) {
 
-        if (clienteRepository.existsByCpf(request.getCpf())) {
+        if (clienteRepository.existsByCpf(request.cpf())) {
             throw new CpfJaCadastradoException();
         }
 
-        Cliente cliente = new Cliente(
-                request.getNome(),
-                request.getCpf(),
-                request.getDataNascimento(),
-                request.getEstadoCivil(),
-                request.getSexo()
-        );
+        Cliente cliente = Cliente.builder()
+                .nome(request.nome())
+                .cpf(request.cpf())
+                .dataNascimento(request.dataNascimento())
+                .estadoCivil(request.estadoCivil())
+                .sexo(request.sexo())
+                .build();
 
         Cliente clienteSalvo = clienteRepository.save(cliente);
+
+        log.info(
+                "Cliente cadastrado com sucesso. id={}",
+                clienteSalvo.getId()
+        );
 
         return toResponse(clienteSalvo);
     }
@@ -44,6 +51,11 @@ public class ClienteService {
 
         Cliente cliente = clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ClienteNaoEncontradoException(cpf));
+
+        log.info(
+                "Cliente consultado com sucesso. id={}",
+                cliente.getId()
+        );
 
         return toResponse(cliente);
     }

@@ -1,6 +1,11 @@
 package com.example.cambio.cliente.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -8,9 +13,16 @@ import java.time.LocalDate;
 @Table(
         name = "clientes",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_cliente_cpf", columnNames = "cpf")
+                @UniqueConstraint(
+                        name = "uk_cliente_cpf",
+                        columnNames = "cpf"
+                )
         }
 )
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Cliente {
 
     @Id
@@ -33,45 +45,4 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Sexo sexo;
-
-    protected Cliente() {
-    }
-
-    public Cliente(
-            String nome,
-            String cpf,
-            LocalDate dataNascimento,
-            EstadoCivil estadoCivil,
-            Sexo sexo) {
-
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.estadoCivil = estadoCivil;
-        this.sexo = sexo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public EstadoCivil getEstadoCivil() {
-        return estadoCivil;
-    }
-
-    public Sexo getSexo() {
-        return sexo;
-    }
 }
