@@ -1,7 +1,7 @@
 package com.example.cambio.cliente.dto;
 
-import com.example.cambio.cliente.domain.EstadoCivil;
-import com.example.cambio.cliente.domain.Sexo;
+import com.example.cambio.enums.EstadoCivil;
+import com.example.cambio.enums.Sexo;
 
 import java.time.LocalDate;
 

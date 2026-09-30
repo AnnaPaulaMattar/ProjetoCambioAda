@@ -1,5 +1,7 @@
 package com.example.cambio.cliente.domain;
 
+import com.example.cambio.enums.EstadoCivil;
+import com.example.cambio.enums.Sexo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
