@@ -15,12 +15,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ClienteServiceTest {
+
+    private static final String CPF_VALIDO = "52998224725";
 
     @Mock
     private ClienteRepository clienteRepository;
@@ -35,23 +41,19 @@ class ClienteServiceTest {
     @Test
     void deveCadastrarClienteComSucesso() {
 
-        CadastrarClienteRequest request = new CadastrarClienteRequest();
-        request.setNome("Cliente Teste");
-        request.setCpf("52998224725");
-        request.setDataNascimento(LocalDate.of(1990, 5, 20));
-        request.setEstadoCivil(EstadoCivil.SOLTEIRO);
-        request.setSexo(Sexo.FEMININO);
+        CadastrarClienteRequest request = criarRequestValido();
 
-        when(clienteRepository.existsByCpf("52998224725"))
+        when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(false);
 
-        Cliente clienteSalvo = new Cliente(
-                "Cliente Teste",
-                "52998224725",
-                LocalDate.of(1990, 5, 20),
-                EstadoCivil.SOLTEIRO,
-                Sexo.FEMININO
-        );
+        Cliente clienteSalvo = Cliente.builder()
+                .id(1L)
+                .nome("Cliente Teste")
+                .cpf(CPF_VALIDO)
+                .dataNascimento(LocalDate.of(1990, 5, 20))
+                .estadoCivil(EstadoCivil.SOLTEIRO)
+                .sexo(Sexo.FEMININO)
+                .build();
 
         when(clienteRepository.save(any(Cliente.class)))
                 .thenReturn(clienteSalvo);
@@ -59,23 +61,24 @@ class ClienteServiceTest {
         ClienteResponse response = clienteService.cadastrar(request);
 
         assertNotNull(response);
-        assertEquals("Cliente Teste", response.getNome());
-        assertEquals("52998224725", response.getCpf());
+        assertEquals(1L, response.id());
+        assertEquals("Cliente Teste", response.nome());
+        assertEquals(CPF_VALIDO, response.cpf());
         assertEquals(
                 LocalDate.of(1990, 5, 20),
-                response.getDataNascimento()
+                response.dataNascimento()
         );
         assertEquals(
                 EstadoCivil.SOLTEIRO,
-                response.getEstadoCivil()
+                response.estadoCivil()
         );
         assertEquals(
                 Sexo.FEMININO,
-                response.getSexo()
+                response.sexo()
         );
 
         verify(clienteRepository)
-                .existsByCpf("52998224725");
+                .existsByCpf(CPF_VALIDO);
 
         verify(clienteRepository)
                 .save(any(Cliente.class));
@@ -84,25 +87,35 @@ class ClienteServiceTest {
     @Test
     void deveLancarExcecaoQuandoCpfJaCadastrado() {
 
-        CadastrarClienteRequest request = new CadastrarClienteRequest();
-        request.setNome("Cliente Teste");
-        request.setCpf("52998224725");
-        request.setDataNascimento(LocalDate.of(1990, 5, 20));
-        request.setEstadoCivil(EstadoCivil.SOLTEIRO);
-        request.setSexo(Sexo.FEMININO);
+        CadastrarClienteRequest request = criarRequestValido();
 
-        when(clienteRepository.existsByCpf("52998224725"))
+        when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(true);
 
-        assertThrows(
+        CpfJaCadastradoException exception = assertThrows(
                 CpfJaCadastradoException.class,
                 () -> clienteService.cadastrar(request)
         );
 
+        assertEquals(
+                "CPF já cadastrado.",
+                exception.getMessage()
+        );
+
         verify(clienteRepository)
-                .existsByCpf("52998224725");
+                .existsByCpf(CPF_VALIDO);
 
         verify(clienteRepository, never())
                 .save(any(Cliente.class));
+    }
+
+    private CadastrarClienteRequest criarRequestValido() {
+        return new CadastrarClienteRequest(
+                "Cliente Teste",
+                CPF_VALIDO,
+                LocalDate.of(1990, 5, 20),
+                EstadoCivil.SOLTEIRO,
+                Sexo.FEMININO
+        );
     }
 }
