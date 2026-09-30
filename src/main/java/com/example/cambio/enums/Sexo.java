@@ -1,4 +1,4 @@
-package com.example.cambio.cliente.domain;
+package com.example.cambio.enums;
 
 public enum Sexo {
     MASCULINO,
