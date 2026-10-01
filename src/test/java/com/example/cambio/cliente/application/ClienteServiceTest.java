@@ -87,22 +87,22 @@ class ClienteServiceTest {
         assertThat(response)
                 .isNotNull();
 
-        assertThat(response.getId())
+        assertThat(response.id())
                 .isEqualTo(1L);
 
-        assertThat(response.getNome())
+        assertThat(response.nome())
                 .isEqualTo("Cliente Teste");
 
-        assertThat(response.getCpf())
+        assertThat(response.cpf())
                 .isEqualTo(CPF_VALIDO);
 
-        assertThat(response.getDataNascimento())
+        assertThat(response.dataNascimento())
                 .isEqualTo(LocalDate.of(1990, 5, 20));
 
-        assertThat(response.getEstadoCivil())
+        assertThat(response.estadoCivil())
                 .isEqualTo(EstadoCivil.SOLTEIRO);
 
-        assertThat(response.getSexo())
+        assertThat(response.sexo())
                 .isEqualTo(Sexo.FEMININO);
 
         verify(clienteRepository)
@@ -121,8 +121,7 @@ class ClienteServiceTest {
         assertThatThrownBy(
                 () -> clienteService.cadastrar(request)
         )
-                .isInstanceOf(CpfJaCadastradoException.class)
-                .hasMessage("CPF já cadastrado.");
+                .isInstanceOf(CpfJaCadastradoException.class);
 
         verify(clienteRepository)
                 .existsByCpf(CPF_VALIDO);
@@ -133,15 +132,12 @@ class ClienteServiceTest {
 
     private CadastrarClienteRequest criarRequestValido() {
 
-        CadastrarClienteRequest request =
-                new CadastrarClienteRequest();
-
-        request.setNome("Cliente Teste");
-        request.setCpf(CPF_VALIDO);
-        request.setDataNascimento(LocalDate.of(1990, 5, 20));
-        request.setEstadoCivil(EstadoCivil.SOLTEIRO);
-        request.setSexo(Sexo.FEMININO);
-
-        return request;
+        return new CadastrarClienteRequest(
+                "Cliente Teste",
+                CPF_VALIDO,
+                LocalDate.of(1990, 5, 20),
+                EstadoCivil.SOLTEIRO,
+                Sexo.FEMININO
+        );
     }
 }

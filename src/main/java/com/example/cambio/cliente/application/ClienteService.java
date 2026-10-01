@@ -17,16 +17,16 @@ public class ClienteService {
 
     public ClienteResponse cadastrar(CadastrarClienteRequest request) {
 
-        if (clienteRepository.existsByCpf(request.getCpf())) {
+        if (clienteRepository.existsByCpf(request.cpf())) {
             throw new CpfJaCadastradoException();
         }
 
         Cliente cliente = Cliente.builder()
-                .nome(request.getNome())
-                .cpf(request.getCpf())
-                .dataNascimento(request.getDataNascimento())
-                .estadoCivil(request.getEstadoCivil())
-                .sexo(request.getSexo())
+                .nome(request.nome())
+                .cpf(request.cpf())
+                .dataNascimento(request.dataNascimento())
+                .estadoCivil(request.estadoCivil())
+                .sexo(request.sexo())
                 .build();
 
         Cliente clienteSalvo = clienteRepository.save(cliente);

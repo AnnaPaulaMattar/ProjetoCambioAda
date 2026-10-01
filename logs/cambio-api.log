@@ -1,0 +1,92 @@
+2026-09-28T17:53:24.454-03:00  INFO 15272 --- [cambio] [main] c.example.cambio.CambioApplicationTests  : Starting CambioApplicationTests using Java 17.0.12 with PID 15272 (started by c117817 in C:\Users\c117817\Downloads\cambio)
+2026-09-28T17:53:24.457-03:00  INFO 15272 --- [cambio] [main] c.example.cambio.CambioApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2026-09-28T17:53:26.357-03:00  INFO 15272 --- [cambio] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-28T17:53:26.503-03:00  INFO 15272 --- [cambio] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 130 ms. Found 1 JPA repository interface.
+2026-09-28T17:53:27.471-03:00  INFO 15272 --- [cambio] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-28T17:53:27.626-03:00  INFO 15272 --- [cambio] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-09-28T17:53:28.544-03:00  INFO 15272 --- [cambio] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-28T17:53:28.597-03:00  INFO 15272 --- [cambio] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-28T17:53:28.841-03:00  INFO 15272 --- [cambio] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:cambio user=SA
+2026-09-28T17:53:28.843-03:00  INFO 15272 --- [cambio] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-28T17:53:28.932-03:00  INFO 15272 --- [cambio] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:cambio]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: CAMBIO/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-28T17:53:30.247-03:00  INFO 15272 --- [cambio] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-28T17:53:30.303-03:00  INFO 15272 --- [cambio] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28T17:53:30.537-03:00  INFO 15272 --- [cambio] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-28T17:53:32.400-03:00  WARN 15272 --- [cambio] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-28T17:53:32.710-03:00  WARN 15272 --- [cambio] [main] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6c724855-6925-463d-b769-ee3f1d9913cf
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-28T17:53:32.727-03:00  INFO 15272 --- [cambio] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-28T17:53:33.792-03:00  INFO 15272 --- [cambio] [main] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:cambio'
+2026-09-28T17:53:34.016-03:00  INFO 15272 --- [cambio] [main] c.example.cambio.CambioApplicationTests  : Started CambioApplicationTests in 10.224 seconds (process running for 12.793)
+2026-09-28T17:53:34.021-03:00  WARN 15272 --- [cambio] [main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-09-28T17:53:34.022-03:00  WARN 15272 --- [cambio] [main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-09-28T17:53:35.507-03:00  INFO 15272 --- [cambio] [main] c.e.c.c.application.ClienteService       : Cliente cadastrado com sucesso. id=1
+2026-09-28T17:53:35.602-03:00  INFO 15272 --- [cambio] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28T17:53:35.613-03:00  INFO 15272 --- [cambio] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-28T17:53:35.622-03:00  INFO 15272 --- [cambio] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-09-28T17:54:09.820-03:00  INFO 18328 --- [cambio] [restartedMain] com.example.cambio.CambioApplication     : Starting CambioApplication using Java 17.0.12 with PID 18328 (C:\Users\c117817\Downloads\cambio\target\classes started by c117817 in C:\Users\c117817\Downloads\cambio)
+2026-09-28T17:54:09.825-03:00  INFO 18328 --- [cambio] [restartedMain] com.example.cambio.CambioApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-09-28T17:54:09.899-03:00  INFO 18328 --- [cambio] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-28T17:54:09.900-03:00  INFO 18328 --- [cambio] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-28T17:54:10.891-03:00  INFO 18328 --- [cambio] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-28T17:54:10.962-03:00  INFO 18328 --- [cambio] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 1 JPA repository interface.
+2026-09-28T17:54:11.724-03:00  INFO 18328 --- [cambio] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-09-28T17:54:11.740-03:00  INFO 18328 --- [cambio] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-28T17:54:11.741-03:00  INFO 18328 --- [cambio] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-09-28T17:54:11.805-03:00  INFO 18328 --- [cambio] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1905 ms
+2026-09-28T17:54:12.046-03:00  INFO 18328 --- [cambio] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-09-28T17:54:12.141-03:00  INFO 18328 --- [cambio] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-09-28T17:54:12.688-03:00  INFO 18328 --- [cambio] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-28T17:54:12.724-03:00  INFO 18328 --- [cambio] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-28T17:54:12.925-03:00  INFO 18328 --- [cambio] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:cambio user=SA
+2026-09-28T17:54:12.928-03:00  INFO 18328 --- [cambio] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-28T17:54:12.997-03:00  INFO 18328 --- [cambio] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:cambio]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: CAMBIO/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-28T17:54:13.896-03:00  INFO 18328 --- [cambio] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-28T17:54:13.940-03:00  INFO 18328 --- [cambio] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28T17:54:14.029-03:00  INFO 18328 --- [cambio] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-28T17:54:14.249-03:00  WARN 18328 --- [cambio] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-28T17:54:14.336-03:00  WARN 18328 --- [cambio] [restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: eaa11449-3e21-482a-9f2e-0b7b9a09710e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-28T17:54:14.344-03:00  INFO 18328 --- [cambio] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-28T17:54:14.752-03:00  INFO 18328 --- [cambio] [restartedMain] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:cambio'
+2026-09-28T17:54:14.849-03:00  INFO 18328 --- [cambio] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-09-28T17:54:14.856-03:00  INFO 18328 --- [cambio] [restartedMain] com.example.cambio.CambioApplication     : Started CambioApplication in 5.751 seconds (process running for 6.842)
+2026-09-28T17:54:34.597-03:00  INFO 18328 --- [cambio] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-28T17:54:34.599-03:00  INFO 18328 --- [cambio] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-28T17:54:34.602-03:00  INFO 18328 --- [cambio] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-09-28T17:55:29.813-03:00  INFO 18328 --- [cambio] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-28T17:55:29.912-03:00  INFO 18328 --- [cambio] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-09-28T17:55:29.917-03:00  INFO 18328 --- [cambio] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28T17:55:29.924-03:00  WARN 18328 --- [cambio] [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-240]
+2026-09-28T17:55:29.925-03:00  INFO 18328 --- [cambio] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-09-28T17:55:29.926-03:00  INFO 18328 --- [cambio] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
