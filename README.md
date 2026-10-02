@@ -4,28 +4,26 @@ API REST desenvolvida em Java com Spring Boot como projeto final do módulo **Ar
 
 O sistema permite cadastrar e consultar clientes, consultar cotações de dólar e euro em tempo real e registrar ordens de compra de moeda estrangeira para retirada em uma agência física.
 
-> **Status do projeto:** em desenvolvimento. A funcionalidade de Cliente, correspondente aos casos de uso UC1 e UC2, já está implementada e testada. As seções de Câmbio, Compra e Segurança devem ser atualizadas após a integração das features da equipe.
+> **Status:** projeto em desenvolvimento. A feature Cliente está implementada na branch `feat/cliente`. As features Câmbio, Compra e Segurança serão consolidadas na integração da equipe.
 
 ## Sumário
 
 1. [Objetivo](#objetivo)
 2. [Arquitetura](#arquitetura)
-3. [Funcionalidades](#funcionalidades)
-4. [Casos de uso](#casos-de-uso)
-5. [Tecnologias](#tecnologias)
-6. [Estrutura do projeto](#estrutura-do-projeto)
-7. [Pré-requisitos](#pré-requisitos)
-8. [Como executar](#como-executar)
-9. [Autenticação](#autenticação)
-10. [Endpoints](#endpoints)
-11. [Exemplos da API de Clientes](#exemplos-da-api-de-clientes)
-12. [Tratamento de erros](#tratamento-de-erros)
-13. [Testes automatizados](#testes-automatizados)
-14. [SOLID e Clean Code](#solid-e-clean-code)
-15. [Design Pattern](#design-pattern)
-16. [Integração com a AwesomeAPI](#integração-com-a-awesomeapi)
-17. [Metodologia ágil](#metodologia-ágil)
-18. [Equipe](#equipe)
+3. [Tecnologias](#tecnologias)
+4. [Estrutura do projeto](#estrutura-do-projeto)
+5. [Como executar](#como-executar)
+6. [Swagger e OpenAPI](#swagger-e-openapi)
+7. [Feature Cliente](#feature-cliente)
+8. [Endpoints de Cliente](#endpoints-de-cliente)
+9. [Validações](#validações)
+10. [Tratamento de erros](#tratamento-de-erros)
+11. [Testes automatizados](#testes-automatizados)
+12. [SOLID e Clean Code](#solid-e-clean-code)
+13. [Logging](#logging)
+14. [Git e Kanban](#git-e-kanban)
+15. [Evidências da Sprint 1](#evidências-da-sprint-1)
+16. [Pendências](#pendências)
 
 ## Objetivo
 
@@ -37,86 +35,24 @@ Construir a API responsável pelo fluxo de compra de moeda estrangeira, contempl
 - registro de ordens de compra;
 - cálculo do valor total da operação;
 - retirada da moeda em agência indicada pelo cliente;
-- autenticação obrigatória em todos os endpoints;
+- autenticação dos endpoints;
 - tratamento explícito das exceções de negócio.
 
 ## Arquitetura
 
 O grupo adotou a arquitetura de **monolito modular**.
 
-A solução permanece em uma única aplicação Spring Boot, mas as responsabilidades são organizadas em módulos de negócio independentes:
+A aplicação permanece em um único projeto Spring Boot, mas as responsabilidades são separadas em módulos:
 
 - Cliente;
 - Câmbio;
 - Compra;
-- Segurança.
+- Segurança;
+- componentes compartilhados.
 
 ### Justificativa
 
-O monolito modular foi escolhido porque:
-
-- o projeto possui escopo delimitado e prazo acadêmico reduzido;
-- reduz a complexidade de configuração e execução;
-- facilita os testes e a demonstração local;
-- mantém os domínios separados por packages;
-- permite uma futura extração de módulos para microsserviços, caso necessário.
-
-A alternativa de microsserviços com Eureka e OpenFeign foi considerada, mas adicionaria maior complexidade de infraestrutura e integração para o prazo e o tamanho do projeto.
-
-## Funcionalidades
-
-### Cliente
-
-- cadastro de cliente;
-- consulta de cliente por CPF;
-- geração automática do identificador;
-- validação dos campos obrigatórios;
-- validação de CPF com 11 dígitos e dígitos verificadores;
-- impedimento de CPF duplicado;
-- tratamento de cliente não encontrado.
-
-### Câmbio
-
-- consulta de cotação de USD;
-- consulta de cotação de EUR;
-- integração com a AwesomeAPI;
-- tratamento de moeda não suportada;
-- tratamento de falha ou timeout da API externa.
-
-> Atualizar esta seção após a integração da feature Câmbio.
-
-### Compra
-
-- validação do cliente;
-- obtenção da cotação da moeda;
-- cálculo do valor total da operação;
-- persistência da ordem de compra;
-- validação da agência de retirada;
-- consulta da ordem de compra.
-
-> Atualizar esta seção após a integração da feature Compra.
-
-## Casos de uso
-
-### UC1: Cadastrar cliente
-
-O cliente informa nome, CPF, data de nascimento, estado civil e sexo. O sistema valida os dados, impede CPF duplicado, persiste o cliente e retorna `201 Created`.
-
-### UC2: Consultar cliente por CPF
-
-O sistema busca o cliente pelo CPF. Quando encontrado, retorna `200 OK`. Quando não encontrado, retorna `404 Not Found`.
-
-### UC3: Consultar cotação
-
-O sistema consulta a cotação atual de USD ou EUR na AwesomeAPI. Moedas não suportadas devem resultar em `422 Unprocessable Entity`.
-
-### UC4: Registrar ordem de compra
-
-O sistema valida o cliente, obtém a cotação, calcula o valor total, persiste a ordem e retorna `201 Created`. Este caso de uso é obrigatório no projeto.
-
-### UC5: Consultar histórico de compras
-
-Caso de uso opcional para listar as ordens de compra associadas ao CPF do cliente.
+A arquitetura de monolito modular foi escolhida porque reduz a complexidade operacional para o escopo acadêmico, facilita a execução local e mantém os domínios separados por packages. A organização modular também permite evolução futura sem concentrar todas as responsabilidades nas mesmas classes.
 
 ## Tecnologias
 
@@ -124,29 +60,32 @@ Caso de uso opcional para listar as ordens de compra associadas ao CPF do client
 - Spring Boot 4.1.1;
 - Spring Web MVC;
 - Spring Data JPA;
-- Spring Validation;
 - Spring Security;
+- Bean Validation;
+- Hibernate Validator;
 - H2 Database;
+- Lombok;
 - Maven;
-- JUnit;
+- JUnit 5;
 - Mockito;
-- Postman;
-- Lombok, disponível no projeto, mas não obrigatório nas classes já implementadas.
+- AssertJ;
+- springdoc-openapi;
+- Swagger UI;
+- Git e GitHub Projects.
 
 ## Estrutura do projeto
 
+Estrutura atual da feature Cliente:
+
 ```text
 src/main/java/com/example/cambio
-├── CambioApplication.java
 ├── cliente
 │   ├── api
 │   │   └── ClienteController.java
 │   ├── application
 │   │   └── ClienteService.java
 │   ├── domain
-│   │   ├── Cliente.java
-│   │   ├── EstadoCivil.java
-│   │   └── Sexo.java
+│   │   └── Cliente.java
 │   ├── dto
 │   │   ├── CadastrarClienteRequest.java
 │   │   └── ClienteResponse.java
@@ -157,125 +96,94 @@ src/main/java/com/example/cambio
 │   │   └── GlobalExceptionHandler.java
 │   └── infrastructure
 │       └── ClienteRepository.java
-└── security
-    └── SecurityConfig.java
+└── enums
+    ├── EstadoCivil.java
+    └── Sexo.java
 ```
 
-Após a integração, adicionar à árvore os módulos `cambio` e `compra` conforme a implementação real da equipe.
-
-## Pré-requisitos
-
-- Java 17 instalado;
-- Maven 3.6.3 ou superior, ou Maven Wrapper incluído no projeto;
-- IntelliJ IDEA ou outra IDE compatível;
-- Postman, Insomnia ou cURL para testar os endpoints.
+Os DTOs `CadastrarClienteRequest` e `ClienteResponse` utilizam `record`. A entidade `Cliente` utiliza Lombok e Builder.
 
 ## Como executar
 
+### Pré-requisitos
+
+- Java 17;
+- Maven Wrapper incluído no projeto;
+- IntelliJ IDEA ou outra IDE Java;
+- navegador para acessar o Swagger UI.
+
 ### Pela IDE
 
-1. Abra o projeto na IDE.
+1. Abra o projeto.
 2. Aguarde o Maven carregar as dependências.
-3. Execute a classe:
+3. Execute `CambioApplication`.
+4. Aguarde a mensagem de inicialização da aplicação.
 
-```text
-com.example.cambio.CambioApplication
+### Pelo terminal no Windows
+
+```powershell
+.\mvnw.cmd clean test
+.\mvnw.cmd spring-boot:run
 ```
 
-4. A aplicação será disponibilizada, por padrão, em:
+A aplicação utiliza, por padrão:
 
 ```text
 http://localhost:8080
 ```
 
-### Pelo Maven Wrapper
-
-No Windows:
-
-```bash
-mvnw.cmd clean test
-mvnw.cmd spring-boot:run
-```
-
-No Linux ou macOS:
-
-```bash
-./mvnw clean test
-./mvnw spring-boot:run
-```
-
 ### Banco H2
 
-Configuração utilizada durante o desenvolvimento:
+O banco está configurado em memória durante o desenvolvimento. Os dados podem ser reinicializados quando a aplicação é encerrada.
 
-```properties
-spring.datasource.url=jdbc:h2:mem:cambio
-spring.datasource.username=sa
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-```
+## Swagger e OpenAPI
 
-O banco está em memória. Portanto, os dados são removidos quando a aplicação é encerrada.
+A documentação interativa utiliza `springdoc-openapi-starter-webmvc-ui`.
 
-## Autenticação
-
-Todos os endpoints devem exigir autenticação.
-
-Durante o desenvolvimento da feature Cliente foi utilizado HTTP Basic Auth do Spring Security:
+Após iniciar a aplicação, acesse:
 
 ```text
-Username: user
-Password: senha gerada no console durante a inicialização
+Swagger UI: http://localhost:8080/swagger-ui.html
+OpenAPI JSON: http://localhost:8080/v3/api-docs
 ```
 
-A configuração definitiva de segurança deve ser consolidada na integração da equipe. As opções aceitas pelo projeto são:
+Dependendo do redirecionamento da biblioteca, a interface também poderá aparecer em:
 
-- HTTP Basic Auth;
-- API Key fixa no cabeçalho `X-API-KEY`;
-- JWT como implementação bônus.
+```text
+http://localhost:8080/swagger-ui/index.html
+```
 
-Credenciais e chaves não devem ser gravadas diretamente em repositório público. Devem ser fornecidas por configuração local ou variável de ambiente.
+## Feature Cliente
 
-## Endpoints
+A feature Cliente é responsável pelos casos de uso:
 
-### Cliente
+- **UC1:** cadastrar cliente;
+- **UC2:** consultar cliente por CPF.
 
-| Método | Endpoint | Descrição | Respostas |
-|---|---|---|---|
-| POST | `/api/clientes` | Cadastra cliente | 201, 400, 409 |
-| GET | `/api/clientes/{cpf}` | Consulta cliente por CPF | 200, 404 |
+### Componentes principais
 
-### Câmbio
+- `ClienteController`: recebe as requisições HTTP;
+- `ClienteService`: aplica as regras de negócio;
+- `ClienteRepository`: realiza o acesso aos dados;
+- `CadastrarClienteRequest`: contrato de entrada;
+- `ClienteResponse`: contrato de saída;
+- `Cliente`: entidade JPA;
+- `GlobalExceptionHandler`: converte exceções em respostas HTTP.
 
-| Método | Endpoint | Descrição | Respostas |
-|---|---|---|---|
-| GET | `/api/cambio/cotacao/{moeda}` | Consulta cotação atual | 200, 422, 503 |
-
-### Compra
-
-| Método | Endpoint | Descrição | Respostas |
-|---|---|---|---|
-| POST | `/api/compras` | Registra ordem de compra | 201, 400, 404, 422 |
-| GET | `/api/compras/{id}` | Consulta compra por ID | 200, 404 |
-| GET | `/api/compras/cliente/{cpf}` | Consulta histórico do cliente | 200 |
-
-> Os endpoints de Câmbio e Compra deverão ser confirmados após o merge das features.
-
-## Exemplos da API de Clientes
+## Endpoints de Cliente
 
 ### Cadastrar cliente
 
 ```http
 POST /api/clientes
-Authorization: Basic <credenciais>
 Content-Type: application/json
 ```
 
+Exemplo de requisição:
+
 ```json
 {
-  "nome": "Cliente Teste",
+  "nome": "Anna Teste",
   "cpf": "52998224725",
   "dataNascimento": "1990-05-20",
   "estadoCivil": "SOLTEIRO",
@@ -283,18 +191,12 @@ Content-Type: application/json
 }
 ```
 
-O CPF deve ser informado com **11 dígitos, sem pontos ou hífen**.
-
-Resposta de sucesso:
-
-```http
-HTTP/1.1 201 Created
-```
+Exemplo de resposta de sucesso:
 
 ```json
 {
   "id": 1,
-  "nome": "Cliente Teste",
+  "nome": "Anna Teste",
   "cpf": "52998224725",
   "dataNascimento": "1990-05-20",
   "estadoCivil": "SOLTEIRO",
@@ -302,232 +204,201 @@ HTTP/1.1 201 Created
 }
 ```
 
+Respostas previstas:
+
+- `201 Created`: cliente cadastrado;
+- `400 Bad Request`: dados inválidos;
+- `409 Conflict`: CPF já cadastrado.
+
 ### Consultar cliente por CPF
 
 ```http
+GET /api/clientes/{cpf}
+```
+
+Exemplo:
+
+```http
 GET /api/clientes/52998224725
-Authorization: Basic <credenciais>
 ```
 
-Resposta de sucesso:
+Respostas previstas:
 
-```http
-HTTP/1.1 200 OK
-```
+- `200 OK`: cliente encontrado;
+- `404 Not Found`: cliente não encontrado.
 
-### CPF duplicado
+## Validações
 
-```http
-HTTP/1.1 409 Conflict
-```
+O cadastro de Cliente valida:
+
+- nome obrigatório;
+- CPF obrigatório;
+- CPF com exatamente 11 dígitos;
+- dígitos verificadores do CPF;
+- data de nascimento obrigatória;
+- data de nascimento no passado;
+- estado civil obrigatório;
+- sexo obrigatório.
+
+O CPF deve ser enviado com 11 números, sem pontos ou hífen.
+
+## Tratamento de erros
+
+As exceções são tratadas pelo `GlobalExceptionHandler` e devolvidas em formato padronizado.
+
+Exemplo:
 
 ```json
 {
-  "timestamp": "2026-09-25T11:55:00",
+  "timestamp": "2026-10-01T14:00:00",
   "status": 409,
   "mensagem": "CPF já cadastrado."
 }
 ```
 
-### Cliente não encontrado
+Erros de Cliente:
 
-```http
-HTTP/1.1 404 Not Found
-```
-
-```json
-{
-  "timestamp": "2026-09-25T11:55:00",
-  "status": 404,
-  "mensagem": "Cliente com CPF 99999999999 não encontrado."
-}
-```
-
-## Tratamento de erros
-
-As exceções de negócio são convertidas em respostas HTTP por um `GlobalExceptionHandler`.
-
-Formato utilizado:
-
-```json
-{
-  "timestamp": "2026-09-25T11:55:00",
-  "status": 400,
-  "mensagem": "Descrição do erro."
-}
-```
-
-| Situação | Status | Mensagem |
-|---|---:|---|
-| Dados cadastrais inválidos | 400 | Mensagem da validação |
-| Cliente não encontrado | 404 | `Cliente com CPF {cpf} não encontrado.` |
-| CPF já cadastrado | 409 | `CPF já cadastrado.` |
-| Moeda não suportada | 422 | `Moeda 'XYZ' não é suportada. Utilize USD ou EUR.` |
-| Falha na API externa | 503 | `Não foi possível obter a cotação no momento. Tente novamente.` |
-| Credencial ausente ou inválida | 401 | `Não autenticado.` |
-
-Antes da entrega, a equipe deve garantir que o ambiente não exponha stack traces nas respostas HTTP.
+| Situação | Status esperado |
+|---|---:|
+| Dados de cadastro inválidos | 400 |
+| Cliente não encontrado | 404 |
+| CPF já cadastrado | 409 |
 
 ## Testes automatizados
 
-A feature Cliente utiliza JUnit e Mockito para testar o `ClienteService` isoladamente.
+A feature Cliente possui testes unitários com JUnit 5, Mockito e AssertJ.
 
-Testes implementados:
+Cenários implementados:
 
-```text
-deveCadastrarClienteComSucesso
-deveLancarExcecaoQuandoCpfJaCadastrado
-```
+- cadastro de cliente com sucesso;
+- tentativa de cadastro com CPF já cadastrado;
+- garantia de que `save()` não é executado no cenário de duplicidade;
+- captura e validação da entidade enviada ao Repository com `ArgumentCaptor`.
 
-O teste de CPF duplicado também verifica que o Repository não executa a persistência:
+Para executar:
 
-```java
-verify(clienteRepository, never())
-        .save(any(Cliente.class));
-```
-
-### Executar testes
-
-No Windows:
-
-```bash
-mvnw.cmd test
-```
-
-No Linux ou macOS:
-
-```bash
-./mvnw test
+```powershell
+.\mvnw.cmd test
 ```
 
 ## SOLID e Clean Code
 
-### Single Responsibility Principle, SRP
+### Responsabilidade Única, SRP
 
-As responsabilidades foram separadas entre as camadas:
-
-- `ClienteController`: comunicação HTTP;
-- `ClienteService`: regras de negócio;
-- `ClienteRepository`: persistência;
-- DTOs: entrada e saída da API;
-- `Cliente`: entidade persistida;
-- `GlobalExceptionHandler`: conversão das exceções em respostas HTTP.
+- Controller: comunicação HTTP;
+- Service: regras de negócio;
+- Repository: persistência;
+- DTOs: contratos de entrada e saída;
+- Entity: representação persistida;
+- Exception Handler: tratamento das respostas de erro.
 
 ### Injeção de dependência por construtor
 
-```java
-private final ClienteRepository clienteRepository;
+O `ClienteService` utiliza uma dependência `final` e `@RequiredArgsConstructor`:
 
-public ClienteService(ClienteRepository clienteRepository) {
-    this.clienteRepository = clienteRepository;
+```java
+@Service
+@RequiredArgsConstructor
+public class ClienteService {
+    private final ClienteRepository clienteRepository;
 }
 ```
 
-A injeção por construtor reduz o acoplamento e permite substituir o Repository por um mock nos testes unitários.
+### Builder
 
-### Clean Code
+A entidade Cliente é criada de forma legível com Builder:
 
-Foram adotadas as seguintes práticas:
-
-- nomes de classes e métodos que expressam intenção;
-- métodos curtos e coesos;
-- ausência de código morto ou comentado;
-- Controller sem regras de negócio;
-- conversão entre entidade e DTO centralizada no método `toResponse`;
-- exceções específicas para regras de negócio.
-
-## Design Pattern
-
-O padrão recomendado para a integração externa é o **Adapter**.
-
-O Adapter encapsula a comunicação com a AwesomeAPI e converte sua resposta externa para o modelo interno de cotação. Dessa forma, alterações no formato da API externa ficam isoladas da regra de negócio.
-
-> Atualizar esta seção com os nomes reais das interfaces e classes após a integração da feature Câmbio.
-
-O serviço de Compra também pode atuar como uma **Facade**, oferecendo uma operação simples para coordenar cliente, cotação, cálculo e persistência. A equipe deverá citar apenas os patterns efetivamente implementados.
-
-## Integração com a AwesomeAPI
-
-A consulta de cotação deve utilizar os pares:
-
-```text
-USD-BRL
-EUR-BRL
+```java
+Cliente cliente = Cliente.builder()
+        .nome(request.nome())
+        .cpf(request.cpf())
+        .dataNascimento(request.dataNascimento())
+        .estadoCivil(request.estadoCivil())
+        .sexo(request.sexo())
+        .build();
 ```
 
-A aplicação deve aceitar somente as moedas:
+## Logging
 
-```text
-USD
-EUR
+A aplicação gera logs de execução. Arquivos de log não são versionados.
+
+Regras adicionadas ao `.gitignore`:
+
+```gitignore
+logs/
+*.log
 ```
 
-Moedas diferentes devem resultar em `422 Unprocessable Entity`. Falhas e timeouts da integração devem ser tratados sem expor erro genérico ao consumidor.
+## Git e Kanban
 
-> Atualizar esta seção com a URL configurada, campo de cotação adotado e estratégia de timeout após o merge.
-
-## Metodologia ágil
-
-O projeto é organizado em duas sprints e acompanhado por board Kanban com as colunas:
+### Branch da feature
 
 ```text
-To Do
-Doing
-Done
+feat/cliente
 ```
 
-### Sprint 1
+Fluxo adotado:
 
-Objetivo:
+```text
+feat/cliente → Pull Request → develop → main
+```
 
-- concluir UC1, UC2 e UC3;
-- definir e documentar a arquitetura;
-- configurar a estrutura inicial da aplicação.
+Comandos principais:
 
-### Sprint 2
+```powershell
+git status
+git add .
+git commit -m "descrição da alteração"
+git push origin feat/cliente
+```
 
-Objetivo:
+### Kanban
 
-- concluir o UC4;
-- integrar as features;
-- consolidar autenticação;
-- aplicar e justificar o Design Pattern;
-- revisar SOLID e Clean Code;
-- executar testes;
-- concluir documentação e apresentação.
+O projeto utiliza GitHub Projects com os status:
 
-O board deve registrar evidências reais de movimentação dos cards durante as sprints.
+- Backlog;
+- Todo;
+- In Progress;
+- Done.
 
-## Equipe
+As tarefas são classificadas pelas features:
 
-| Integrante | Responsabilidade | Papel Scrum |
-|---|---|---|
-| Anna Paula Mattar | Feature Cliente, UC1 e UC2 | Preencher |
-| Integrante 2 | Feature Câmbio, UC3 | Preencher |
-| Integrante 3 | Feature Compra, UC4 e integração | Preencher |
+- Cliente;
+- Câmbio;
+- Compra;
+- Segurança;
+- Geral/Arquitetura.
 
-Preencher os nomes completos e os papéis de Product Owner, Scrum Master e Dev Team antes da entrega.
+Cada card deve registrar responsável, Sprint, critérios de aceite e evidência.
 
-## Evidências concluídas da feature Cliente
+## Evidências da Sprint 1
 
-- `POST /api/clientes` com retorno `201 Created`;
-- tentativa de cadastrar CPF duplicado com retorno `409 Conflict`;
-- requisição inválida com retorno `400 Bad Request`;
-- `GET /api/clientes/{cpf}` com retorno `200 OK`;
-- consulta de CPF inexistente com retorno `404 Not Found`;
-- acesso sem credencial com retorno `401 Unauthorized`;
-- dois testes unitários executados com sucesso.
+### Swagger
 
-## Pendências antes da entrega
+| Cenário | Resultado esperado | Situação |
+|---|---:|---|
+| Cadastro de cliente válido | 201 Created | ✅ Validado no Swagger |
+| CPF duplicado | 409 Conflict | ⏳ Pendente de confirmação |
+| Consulta de cliente existente | 200 OK | ⏳ Pendente de confirmação |
+| Cliente inexistente | 404 Not Found | ⏳ Pendente de confirmação |
+| Dados inválidos | 400 Bad Request | ⏳ Pendente de confirmação |
 
-- integrar os módulos Câmbio e Compra;
-- confirmar a implementação definitiva de autenticação;
-- garantir uma única `SecurityConfig` após o merge;
-- mover os componentes globais de erro para package compartilhado, caso sejam reutilizados pelos demais módulos;
-- atualizar a documentação do Adapter com os nomes reais das classes;
-- confirmar endpoints e exemplos de Câmbio e Compra;
-- adicionar nomes e papéis dos integrantes;
-- adicionar link ou imagem do board Kanban;
-- executar `mvnw.cmd clean test` no projeto integrado;
-- testar o fluxo completo do UC4 no Postman;
-- gerar o arquivo ZIP final para upload individual no LMS.
+Evidência confirmada:
+
+```text
+POST /api/clientes
+Response code: 201
+Cliente criado com id 1
+```
+
+## Pendências
+
+- confirmar no Swagger o retorno `409` para CPF duplicado;
+- confirmar o retorno `200` na consulta por CPF;
+- confirmar o retorno `404` para cliente inexistente;
+- confirmar o retorno `400` para request inválido;
+- integrar a feature Câmbio;
+- integrar a feature Compra;
+- consolidar a autenticação definitiva;
+- complementar o README após a integração das demais features;
+- criar o Pull Request de `feat/cliente` para `develop`.

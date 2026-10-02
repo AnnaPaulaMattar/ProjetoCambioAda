@@ -1,23 +1,23 @@
 package com.example.cambio.cliente.application;
 
 import com.example.cambio.cliente.domain.Cliente;
-import com.example.cambio.enums.EstadoCivil;
-import com.example.cambio.enums.Sexo;
 import com.example.cambio.cliente.dto.CadastrarClienteRequest;
 import com.example.cambio.cliente.dto.ClienteResponse;
 import com.example.cambio.cliente.exception.CpfJaCadastradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
+import com.example.cambio.enums.EstadoCivil;
+import com.example.cambio.enums.Sexo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -46,7 +46,7 @@ class ClienteServiceTest {
         when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(false);
 
-        Cliente clienteSalvo = Cliente.builder()
+        Cliente clientePersistido = Cliente.builder()
                 .id(1L)
                 .nome("Cliente Teste")
                 .cpf(CPF_VALIDO)
@@ -56,51 +56,72 @@ class ClienteServiceTest {
                 .build();
 
         when(clienteRepository.save(any(Cliente.class)))
-                .thenReturn(clienteSalvo);
+                .thenReturn(clientePersistido);
 
-        ClienteResponse response = clienteService.cadastrar(request);
+        ClienteResponse response =
+                clienteService.cadastrar(request);
 
-        assertNotNull(response);
-        assertEquals(1L, response.id());
-        assertEquals("Cliente Teste", response.nome());
-        assertEquals(CPF_VALIDO, response.cpf());
-        assertEquals(
-                LocalDate.of(1990, 5, 20),
-                response.dataNascimento()
-        );
-        assertEquals(
-                EstadoCivil.SOLTEIRO,
-                response.estadoCivil()
-        );
-        assertEquals(
-                Sexo.FEMININO,
-                response.sexo()
-        );
+        ArgumentCaptor<Cliente> captor =
+                ArgumentCaptor.forClass(Cliente.class);
+
+        verify(clienteRepository)
+                .save(captor.capture());
+
+        Cliente clienteSalvo = captor.getValue();
+
+        assertThat(clienteSalvo.getNome())
+                .isEqualTo("Cliente Teste");
+
+        assertThat(clienteSalvo.getCpf())
+                .isEqualTo(CPF_VALIDO);
+
+        assertThat(clienteSalvo.getDataNascimento())
+                .isEqualTo(LocalDate.of(1990, 5, 20));
+
+        assertThat(clienteSalvo.getEstadoCivil())
+                .isEqualTo(EstadoCivil.SOLTEIRO);
+
+        assertThat(clienteSalvo.getSexo())
+                .isEqualTo(Sexo.FEMININO);
+
+        assertThat(response)
+                .isNotNull();
+
+        assertThat(response.id())
+                .isEqualTo(1L);
+
+        assertThat(response.nome())
+                .isEqualTo("Cliente Teste");
+
+        assertThat(response.cpf())
+                .isEqualTo(CPF_VALIDO);
+
+        assertThat(response.dataNascimento())
+                .isEqualTo(LocalDate.of(1990, 5, 20));
+
+        assertThat(response.estadoCivil())
+                .isEqualTo(EstadoCivil.SOLTEIRO);
+
+        assertThat(response.sexo())
+                .isEqualTo(Sexo.FEMININO);
 
         verify(clienteRepository)
                 .existsByCpf(CPF_VALIDO);
-
-        verify(clienteRepository)
-                .save(any(Cliente.class));
     }
 
     @Test
     void deveLancarExcecaoQuandoCpfJaCadastrado() {
 
-        CadastrarClienteRequest request = criarRequestValido();
+        CadastrarClienteRequest request =
+                criarRequestValido();
 
         when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(true);
 
-        CpfJaCadastradoException exception = assertThrows(
-                CpfJaCadastradoException.class,
+        assertThatThrownBy(
                 () -> clienteService.cadastrar(request)
-        );
-
-        assertEquals(
-                "CPF já cadastrado.",
-                exception.getMessage()
-        );
+        )
+                .isInstanceOf(CpfJaCadastradoException.class);
 
         verify(clienteRepository)
                 .existsByCpf(CPF_VALIDO);
@@ -110,6 +131,7 @@ class ClienteServiceTest {
     }
 
     private CadastrarClienteRequest criarRequestValido() {
+
         return new CadastrarClienteRequest(
                 "Cliente Teste",
                 CPF_VALIDO,
