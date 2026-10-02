@@ -20,14 +20,22 @@ public class CambioService {
     private final CotacaoMapper mapper;
 
     public CotacaoResponse cotacao(Moedas moeda){
-        BigDecimal valor = BigDecimal.valueOf(0.0);
-        if(moeda.equals(Moedas.USD)) {
-            valor = client.consultarUsd();
-        }else if(moeda.equals(Moedas.EUR)){
-            valor = client.consultarEur();
-        }
-        Cotacao cotacao = new Cotacao(moeda, valor);
 
-        return mapper.toCotacaoResponse(cotacao);
+        try {
+            BigDecimal valor = BigDecimal.valueOf(0.0);
+            if (moeda.equals(Moedas.USD)) {
+                valor = client.consultarUsd();
+            } else if (moeda.equals(Moedas.EUR)) {
+                valor = client.consultarEur();
+            } else {
+                throw new RuntimeException("Moeda invalida");
+            }
+            Cotacao cotacao = new Cotacao(moeda, valor);
+
+            return mapper.toCotacaoResponse(cotacao);
+        } catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 }
