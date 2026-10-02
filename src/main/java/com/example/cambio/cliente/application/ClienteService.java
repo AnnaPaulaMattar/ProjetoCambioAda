@@ -6,16 +6,20 @@ import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.exception.ClienteNaoEncontradoException;
 import com.example.cambio.cliente.exception.CpfJaCadastradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
+    @Autowired
     private final ClienteRepository clienteRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
+    // public ClienteService(ClienteRepository clienteRepository) {
+       // this.clienteRepository = clienteRepository;
+    //}
 
     public ClienteResponse cadastrar(CadastrarClienteRequest request) {
 
