@@ -3,7 +3,7 @@ package com.example.cambio.cliente.application;
 import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.dto.CadastrarClienteRequest;
 import com.example.cambio.cliente.dto.ClienteResponse;
-import com.example.cambio.cliente.exception.CpfJaCadastradoException;
+import com.example.cambio.exceptions.CpfJaCadastradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import com.example.cambio.enums.EstadoCivil;
 import com.example.cambio.enums.Sexo;
