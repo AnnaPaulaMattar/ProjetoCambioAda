@@ -4,6 +4,8 @@ import com.example.cambio.cambio.application.CambioService;
 import com.example.cambio.cambio.dto.CotacaoResponse;
 import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.exception.ClienteNaoEncontradoException;
+import com.example.cambio.compra.exception.CompraNaoEncontradaException;
+import com.example.cambio.compra.exception.AgenciaInvalidaException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import com.example.cambio.compra.domain.Compra;
 import com.example.cambio.compra.dto.CompraResponse;
@@ -43,7 +45,7 @@ public class CompraService {
         // 1. Validar se cliente existe
         Cliente cliente = clienteRepository.findByCpf(request.getCpf())
                 .orElseThrow(() -> new ClienteNaoEncontradoException(
-                        "Cliente com CPF " + request.getCpf() + " não encontrado"
+                        request.getCpf()
                 ));
 
         // 2. Validar se agência é válida
@@ -74,7 +76,7 @@ public class CompraService {
 
     public CompraResponse consultarCompra(Long id) {
         Compra compra = compraRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Compra com ID " + id + " não encontrada"));
+                .orElseThrow(() -> new CompraNaoEncontradaException(id));
 
         return compraMapper.toCompraResponse(compra);
     }
@@ -83,7 +85,7 @@ public class CompraService {
         // Validar se cliente existe
         clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ClienteNaoEncontradoException(
-                        "Cliente com CPF " + cpf + " não encontrado"
+                        cpf
                 ));
 
         return compraRepository.findByClienteCpf(cpf)
@@ -94,8 +96,10 @@ public class CompraService {
 
     private void validarAgencia(String agencia) {
         if (!AGENCIAS_VALIDAS.contains(agencia)) {
-            throw new RuntimeException("Agência " + agencia + " não é válida. " +
-                    "Agências disponíveis: " + String.join(", ", AGENCIAS_VALIDAS));
+            throw new AgenciaInvalidaException(
+                    agencia,
+                    AGENCIAS_VALIDAS
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.cambio.cliente.exception;
+package com.example.cambio.shared.exception;
 
 import java.time.LocalDateTime;
 
