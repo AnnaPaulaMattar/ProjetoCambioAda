@@ -20,7 +20,7 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
 
-    public ClienteResponse cadastrar(CadastrarClienteRequest request) {
+    public Cliente cadastrar(CadastrarClienteRequest request) {
 
         if (clienteRepository.existsByCpf(request.cpf())) {
             throw new CpfJaCadastradoException();
@@ -34,9 +34,7 @@ public class ClienteService {
                 .sexo(request.sexo())
                 .build();
 
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        return toResponse(clienteSalvo);
+        return clienteRepository.save(cliente);
     }
 
     public ClienteResponse consultarPorCpf(String cpf) {
