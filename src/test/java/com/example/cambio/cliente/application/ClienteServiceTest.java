@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,12 +32,9 @@ class ClienteServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
 
+    @InjectMocks
     private ClienteService clienteService;
 
-    @BeforeEach
-    void setUp() {
-        clienteService = new ClienteService(clienteRepository);
-    }
 
     @Test
     void deveCadastrarClienteComSucesso() {
@@ -58,7 +56,7 @@ class ClienteServiceTest {
         when(clienteRepository.save(any(Cliente.class)))
                 .thenReturn(clientePersistido);
 
-        ClienteResponse response =
+        Cliente response =
                 clienteService.cadastrar(request);
 
         ArgumentCaptor<Cliente> captor =
@@ -87,22 +85,22 @@ class ClienteServiceTest {
         assertThat(response)
                 .isNotNull();
 
-        assertThat(response.id())
+        assertThat(response.getId())
                 .isEqualTo(1L);
 
-        assertThat(response.nome())
+        assertThat(response.getNome())
                 .isEqualTo("Cliente Teste");
 
-        assertThat(response.cpf())
+        assertThat(response.getCpf())
                 .isEqualTo(CPF_VALIDO);
 
-        assertThat(response.dataNascimento())
+        assertThat(response.getDataNascimento())
                 .isEqualTo(LocalDate.of(1990, 5, 20));
 
-        assertThat(response.estadoCivil())
+        assertThat(response.getEstadoCivil())
                 .isEqualTo(EstadoCivil.SOLTEIRO);
 
-        assertThat(response.sexo())
+        assertThat(response.getSexo())
                 .isEqualTo(Sexo.FEMININO);
 
         verify(clienteRepository)
@@ -135,9 +133,11 @@ class ClienteServiceTest {
         return new CadastrarClienteRequest(
                 "Cliente Teste",
                 CPF_VALIDO,
+                "123456789",
                 LocalDate.of(1990, 5, 20),
                 EstadoCivil.SOLTEIRO,
                 Sexo.FEMININO
+
         );
     }
 }
