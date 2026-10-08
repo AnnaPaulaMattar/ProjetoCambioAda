@@ -20,12 +20,12 @@ public class AuthenticationService {
 
     private final ClienteService clienteService;
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     public LoginResponseDTO login (LoginRequestDTO request){
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
-                        request.email(),
+                        request.cpf(),
                         request.password()
                 );
 

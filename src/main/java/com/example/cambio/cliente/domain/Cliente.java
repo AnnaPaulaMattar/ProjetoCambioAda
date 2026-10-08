@@ -3,11 +3,7 @@ package com.example.cambio.cliente.domain;
 import com.example.cambio.enums.EstadoCivil;
 import com.example.cambio.enums.Sexo;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,6 +49,10 @@ public class Cliente implements UserDetails {
     @Column(nullable = false)
     private Sexo sexo;
 
+    @Column(nullable = false)
+    @Setter(AccessLevel.PUBLIC)
+    private String password;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -60,12 +60,12 @@ public class Cliente implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return cpf;
     }
 
     @Override

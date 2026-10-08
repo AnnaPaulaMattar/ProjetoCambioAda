@@ -12,6 +12,8 @@ import com.example.cambio.exceptions.CpfJaCadastradoException;
 import com.example.cambio.exceptions.CpfJaCadastradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,21 +22,33 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Cliente cadastrar(CadastrarClienteRequest request) {
+        try {
+            if (clienteRepository.existsByCpf(request.cpf())) {
+                throw new CpfJaCadastradoException();
+            }
 
-        if (clienteRepository.existsByCpf(request.cpf())) {
-            throw new CpfJaCadastradoException();
+
+            Cliente cliente = Cliente.builder()
+                    .nome(request.nome())
+                    .cpf(request.cpf())
+                    .dataNascimento(request.dataNascimento())
+                    .estadoCivil(request.estadoCivil())
+                    .sexo(request.sexo())
+                    .build();
+
+            cliente.setPassword(
+                    passwordEncoder.encode(request.password())
+            );
+
+            return clienteRepository.save(cliente);
+        } catch (DataIntegrityViolationException e){
+            throw new DataIntegrityViolationException(
+                    "Erro de integridade de dados"
+            );
         }
-
-        Cliente cliente = Cliente.builder()
-                .nome(request.nome())
-                .cpf(request.cpf())
-                .dataNascimento(request.dataNascimento())
-                .estadoCivil(request.estadoCivil())
-                .sexo(request.sexo())
-                .build();
-
-        return clienteRepository.save(cliente);
     }
 
     public ClienteResponse consultarPorCpf(String cpf) {

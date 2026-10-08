@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,12 +32,9 @@ class ClienteServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
 
+    @InjectMocks
     private ClienteService clienteService;
 
-    @BeforeEach
-    void setUp() {
-        clienteService = new ClienteService(clienteRepository);
-    }
 
     @Test
     void deveCadastrarClienteComSucesso() {
@@ -135,9 +133,11 @@ class ClienteServiceTest {
         return new CadastrarClienteRequest(
                 "Cliente Teste",
                 CPF_VALIDO,
+                "123456789",
                 LocalDate.of(1990, 5, 20),
                 EstadoCivil.SOLTEIRO,
                 Sexo.FEMININO
+
         );
     }
 }
