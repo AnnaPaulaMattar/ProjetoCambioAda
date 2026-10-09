@@ -3,14 +3,9 @@ package com.example.cambio.cliente.application;
 import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.dto.CadastrarClienteRequest;
 import com.example.cambio.cliente.dto.ClienteResponse;
-
-import com.example.cambio.cliente.domain.Cliente;
+import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import com.example.cambio.exceptions.ClienteNaoEncontradoException;
 import com.example.cambio.exceptions.CpfJaCadastradoException;
-
-import com.example.cambio.exceptions.CpfJaCadastradoException;
-import com.example.cambio.exceptions.CpfJaCadastradoException;
-import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public Cliente cadastrar(CadastrarClienteRequest request) {
@@ -29,7 +23,6 @@ public class ClienteService {
             if (clienteRepository.existsByCpf(request.cpf())) {
                 throw new CpfJaCadastradoException();
             }
-
 
             Cliente cliente = Cliente.builder()
                     .nome(request.nome())
@@ -44,9 +37,11 @@ public class ClienteService {
             );
 
             return clienteRepository.save(cliente);
-        } catch (DataIntegrityViolationException e){
+
+        } catch (DataIntegrityViolationException exception) {
             throw new DataIntegrityViolationException(
-                    "Erro de integridade de dados"
+                    "Erro de integridade de dados",
+                    exception
             );
         }
     }

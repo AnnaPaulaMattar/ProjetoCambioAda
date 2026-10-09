@@ -2,18 +2,17 @@ package com.example.cambio.cliente.application;
 
 import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.dto.CadastrarClienteRequest;
-import com.example.cambio.cliente.dto.ClienteResponse;
-import com.example.cambio.exceptions.CpfJaCadastradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import com.example.cambio.enums.EstadoCivil;
 import com.example.cambio.enums.Sexo;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.cambio.exceptions.CpfJaCadastradoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -28,13 +27,17 @@ import static org.mockito.Mockito.when;
 class ClienteServiceTest {
 
     private static final String CPF_VALIDO = "52998224725";
+    private static final String SENHA = "123456789";
+    private static final String SENHA_CODIFICADA = "senhaCodificada";
 
     @Mock
     private ClienteRepository clienteRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private ClienteService clienteService;
-
 
     @Test
     void deveCadastrarClienteComSucesso() {
@@ -43,6 +46,9 @@ class ClienteServiceTest {
 
         when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(false);
+
+        when(passwordEncoder.encode(SENHA))
+                .thenReturn(SENHA_CODIFICADA);
 
         Cliente clientePersistido = Cliente.builder()
                 .id(1L)
@@ -56,8 +62,7 @@ class ClienteServiceTest {
         when(clienteRepository.save(any(Cliente.class)))
                 .thenReturn(clientePersistido);
 
-        Cliente response =
-                clienteService.cadastrar(request);
+        Cliente response = clienteService.cadastrar(request);
 
         ArgumentCaptor<Cliente> captor =
                 ArgumentCaptor.forClass(Cliente.class);
@@ -82,6 +87,9 @@ class ClienteServiceTest {
         assertThat(clienteSalvo.getSexo())
                 .isEqualTo(Sexo.FEMININO);
 
+        assertThat(clienteSalvo.getPassword())
+                .isEqualTo(SENHA_CODIFICADA);
+
         assertThat(response)
                 .isNotNull();
 
@@ -105,13 +113,15 @@ class ClienteServiceTest {
 
         verify(clienteRepository)
                 .existsByCpf(CPF_VALIDO);
+
+        verify(passwordEncoder)
+                .encode(SENHA);
     }
 
     @Test
     void deveLancarExcecaoQuandoCpfJaCadastrado() {
 
-        CadastrarClienteRequest request =
-                criarRequestValido();
+        CadastrarClienteRequest request = criarRequestValido();
 
         when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(true);
@@ -124,6 +134,9 @@ class ClienteServiceTest {
         verify(clienteRepository)
                 .existsByCpf(CPF_VALIDO);
 
+        verify(passwordEncoder, never())
+                .encode(any(CharSequence.class));
+
         verify(clienteRepository, never())
                 .save(any(Cliente.class));
     }
@@ -133,11 +146,10 @@ class ClienteServiceTest {
         return new CadastrarClienteRequest(
                 "Cliente Teste",
                 CPF_VALIDO,
-                "123456789",
+                SENHA,
                 LocalDate.of(1990, 5, 20),
                 EstadoCivil.SOLTEIRO,
                 Sexo.FEMININO
-
         );
     }
 }
