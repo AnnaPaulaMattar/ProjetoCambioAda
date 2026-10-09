@@ -1,6 +1,7 @@
 package com.example.cambio.cliente.api;
 
 import com.example.cambio.cliente.application.ClienteService;
+import com.example.cambio.cliente.domain.Cliente;
 import com.example.cambio.cliente.dto.CadastrarClienteRequest;
 import com.example.cambio.cliente.dto.ClienteResponse;
 import jakarta.validation.Valid;
@@ -16,15 +17,6 @@ public class ClienteController {
 
     public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
-    }
-
-    @PostMapping
-    public ResponseEntity<ClienteResponse> cadastrar(
-            @Valid @RequestBody CadastrarClienteRequest request) {
-
-        ClienteResponse cliente = clienteService.cadastrar(request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
     @GetMapping("/{cpf}")

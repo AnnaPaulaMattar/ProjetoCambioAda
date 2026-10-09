@@ -23,6 +23,9 @@ public record CadastrarClienteRequest(
         @CPF(message = "CPF inválido.")
         String cpf,
 
+        @NotBlank(message = "Senha é obrigatória.")
+        String password,
+
         @NotNull(message = "Data de nascimento é obrigatória.")
         @Past(message = "Data de nascimento deve estar no passado.")
         LocalDate dataNascimento,

@@ -1,4 +1,4 @@
-package com.example.cambio.cliente.exception;
+package com.example.cambio.exceptions;
 
 public class CpfJaCadastradoException extends RuntimeException {
 
