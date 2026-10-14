@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -32,6 +33,9 @@ class ClienteServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private ClienteService clienteService;
 
@@ -43,6 +47,9 @@ class ClienteServiceTest {
 
         when(clienteRepository.existsByCpf(CPF_VALIDO))
                 .thenReturn(false);
+
+        when(passwordEncoder.encode("123456789"))
+                .thenReturn("encoded-password");
 
         Cliente clientePersistido = Cliente.builder()
                 .id(1L)
