@@ -3,9 +3,9 @@ package com.example.cambio.compra.application;
 import com.example.cambio.cambio.application.CambioService;
 import com.example.cambio.cambio.dto.CotacaoResponse;
 import com.example.cambio.cliente.domain.Cliente;
-import com.example.cambio.cliente.exception.ClienteNaoEncontradoException;
 import com.example.cambio.cliente.infrastructure.ClienteRepository;
 import com.example.cambio.compra.domain.Compra;
+import com.example.cambio.exceptions.ClienteNaoEncontradoException;
 import com.example.cambio.compra.dto.CompraResponse;
 import com.example.cambio.compra.dto.RegistrarCompraRequest;
 import com.example.cambio.compra.infrastructure.CompraRepository;
@@ -42,9 +42,7 @@ public class CompraService {
 
         // 1. Validar se cliente existe
         Cliente cliente = clienteRepository.findByCpf(request.getCpf())
-                .orElseThrow(() -> new ClienteNaoEncontradoException(
-                        "Cliente com CPF " + request.getCpf() + " não encontrado"
-                ));
+                .orElseThrow(() -> new ClienteNaoEncontradoException(request.getCpf()));
 
         // 2. Validar se agência é válida
         validarAgencia(request.getAgenciaRetirada());
@@ -82,9 +80,7 @@ public class CompraService {
     public List<CompraResponse> consultarComprasPorCpf(String cpf) {
         // Validar se cliente existe
         clienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ClienteNaoEncontradoException(
-                        "Cliente com CPF " + cpf + " não encontrado"
-                ));
+                .orElseThrow(() -> new ClienteNaoEncontradoException(cpf));
 
         return compraRepository.findByClienteCpf(cpf)
                 .stream()
